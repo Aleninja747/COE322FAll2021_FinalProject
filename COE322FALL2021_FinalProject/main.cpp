@@ -71,6 +71,24 @@ public:
         }
         return 0;
     }
+    int majority(){
+        int counter_A=0,counter_B=0;
+        for (int i =0; i<voter_vec.size(); i++) {
+            if (voter_vec.at(i).get_affiliation()==-1) {
+                counter_A++;
+            }
+            else if (voter_vec.at(i).get_affiliation()==1){
+                counter_B++;
+            }
+        }
+        if (counter_B>counter_A) {
+            return counter_B;
+        }
+        else if (counter_A>counter_B){
+            return counter_A;
+        }
+        return int(voter_vec.size())-counter_B-counter_A;
+    };
     int size(){
         return int(voter_vec.size());
     };
@@ -95,7 +113,35 @@ public:
     };
 };
 
-int main(int argc, const char * argv[]) {
+class Population{
+private:
+    vector<Voter> voter_vec;
+public:
+    Population(string input_str){
+        for (int i=0; i<input_str.size(); i++) {
+            if (input_str.at(i)=='-') {
+                Voter temp_voter(i,-1);
+                voter_vec.push_back(temp_voter);
+            }
+            else if (input_str.at(i)=='+'){
+                Voter temp_voter(i,1);
+                voter_vec.push_back(temp_voter);
+            }
+            else{
+                Voter temp_voter(i,0);
+                voter_vec.push_back(temp_voter);
+            }
+        }
+    };
+    Population( int population_size,int majority,bool trace=false ){
+        vector<Voter> temp_vec;
+        vector<int> allingment_vec;
+        
+        
+    };
+};
+
+int main() {
     District tester(vector<Voter> {{1,-1},{2,1},{3,-1}});
     
     cout<<"distric size "<<tester.lean()<<std::endl;
