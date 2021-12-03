@@ -71,13 +71,34 @@ public:
         }
         return 0;
     }
+    int size(){
+        return int(voter_vec.size());
+    };
+    District sub(int first, int last){
+        vector<Voter> subset{};
+        for (int i=first; i<last; i++) {
+            subset.push_back(voter_vec.at(i));
+        }
+        District sub_distric{subset};
+        return sub_distric;
+    };
+    void print(){
+        for (int i=0; i<voter_vec.size(); i++) {
+            if (voter_vec.at(i).get_affiliation()==-1) {
+                cout<<"A";
+            }
+            else if (voter_vec.at(i).get_affiliation()==1){
+                cout<<"B";
+            }
+        }
+        cout<<"\n";
+    };
 };
 
 int main(int argc, const char * argv[]) {
-    Voter test(1,1);
-    test.print();
-    string str("hello"),str2("h");
+    District tester(vector<Voter> {{1,-1},{2,1},{3,-1}});
     
-    cout<<(str.at(0)=='g')<<std::endl;
+    cout<<"distric size "<<tester.lean()<<std::endl;
+    tester.print();
     return 0;
 }
