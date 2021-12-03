@@ -6,6 +6,14 @@
 //
 
 #include <iostream>
+#include <vector>
+
+class Voter{
+private:
+    int voter_id{0}, affiliation{0};
+public:
+    Voter(int id, int afill) : voter_id(id), affiliation(afill){};
+};
 
 int main(int argc, const char * argv[]) {
     // insert code here...
