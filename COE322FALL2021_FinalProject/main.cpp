@@ -123,6 +123,9 @@ class Districting{
 private:
     vector<District> district_vec;
 public:
+    Districting(District input_district){
+        district_vec.push_back(input_district);
+    };
     int size(){
         return int(district_vec.size());
     };
@@ -179,6 +182,17 @@ public:
         
         
     };
+    void print(){
+        for (int i=0; i<voter_vec.size(); i++) {
+            if (voter_vec.at(i).get_affiliation()==-1) {
+                cout<<"A";
+            }
+            else if (voter_vec.at(i).get_affiliation()==1){
+                cout<<"B";
+            }
+        }
+        cout<<"\n";
+    };
     int lean(){
         int counter_A=0,counter_B=0;
         for (int i =0; i<voter_vec.size(); i++) {
@@ -201,6 +215,12 @@ public:
         return int(voter_vec.size());
     };
     Districting minority_rules(int ndistricts){
+        int minority = -1*this->lean();
+        District temp_district(voter_vec);
+        for (int i=this->size()-1; i>ndistricts-1; i++) {
+            District sub = temp_district.sub(0, i);
+            
+        }
         return {};
     }
 };
@@ -210,5 +230,9 @@ int main() {
     
     cout<<"distric size "<<tester.lean()<<std::endl;
     tester.print();
+    Population five("+++--");
+    cout << "Redistricting population: " << std::endl;
+    five.print();
+    cout << ".. majority rule: " << five.lean() << std::endl;
     return 0;
 }
