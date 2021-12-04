@@ -8,7 +8,9 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <optional>
 
+using std::optional;
 using std::vector;
 using std::string;
 using std::cout;
@@ -116,6 +118,41 @@ public:
     };
 };
 
+
+class Districting{
+private:
+    vector<District> district_vec;
+public:
+    int size(){
+        return int(district_vec.size());
+    };
+    void extend_with_new_distric(Voter input_voter){
+        District new_district(input_voter);
+        district_vec.push_back(new_district);
+    };
+    void extend_last_district(Voter input_voter){
+        district_vec.back().insert_voter(input_voter);
+    };
+    int lean(){
+        int counter_A=0,counter_B=0;
+        for (int i=0; i<district_vec.size(); i++) {
+            if (district_vec.at(i).lean()==-1) {
+                counter_A++;
+            }
+            else if (district_vec.at(i).lean() == 1){
+                counter_B++;
+            }
+        }
+        if (counter_B>counter_A) {
+            return 1;
+        }
+        else if (counter_A>counter_B){
+            return -1;
+        }
+        return 0;
+    }
+};
+
 class Population{
 private:
     vector<Voter> voter_vec;
@@ -163,39 +200,8 @@ public:
     int size(){
         return int(voter_vec.size());
     };
-};
-
-class Districting{
-private:
-    vector<District> district_vec;
-public:
-    int size(){
-        return int(district_vec.size());
-    };
-    void extend_with_new_distric(Voter input_voter){
-        District new_district(input_voter);
-        district_vec.push_back(new_district);
-    };
-    void extend_last_district(Voter input_voter){
-        district_vec.back().insert_voter(input_voter);
-    };
-    int lean(){
-        int counter_A=0,counter_B=0;
-        for (int i=0; i<district_vec.size(); i++) {
-            if (district_vec.at(i).lean()==-1) {
-                counter_A++;
-            }
-            else if (district_vec.at(i).lean() == 1){
-                counter_B++;
-            }
-        }
-        if (counter_B>counter_A) {
-            return 1;
-        }
-        else if (counter_A>counter_B){
-            return -1;
-        }
-        return 0;
+    Districting minority_rules(int ndistricts){
+        return {};
     }
 };
 
