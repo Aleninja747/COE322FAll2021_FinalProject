@@ -70,7 +70,7 @@ public:
             return -1;
         }
         return 0;
-    }
+    };
     int majority(){
         int counter_A=0,counter_B=0;
         for (int i =0; i<voter_vec.size(); i++) {
@@ -138,6 +138,27 @@ public:
         vector<int> allingment_vec;
         
         
+    };
+    int lean(){
+        int counter_A=0,counter_B=0;
+        for (int i =0; i<voter_vec.size(); i++) {
+            if (voter_vec.at(i).get_affiliation()==-1) {
+                counter_A++;
+            }
+            else if (voter_vec.at(i).get_affiliation()==1){
+                counter_B++;
+            }
+        }
+        if (counter_B>counter_A) {
+            return 1;
+        }
+        else if (counter_A>counter_B){
+            return -1;
+        }
+        return 0;
+    };
+    int size(){
+        return int(voter_vec.size());
     };
 };
 
