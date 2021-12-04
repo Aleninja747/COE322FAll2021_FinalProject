@@ -92,6 +92,9 @@ public:
     int size(){
         return int(voter_vec.size());
     };
+    void insert_voter(Voter input_voter){
+        voter_vec.push_back(input_voter);
+    };
     District sub(int first, int last){
         vector<Voter> subset{};
         for (int i=first; i<last; i++) {
@@ -159,6 +162,22 @@ public:
     };
     int size(){
         return int(voter_vec.size());
+    };
+};
+
+class Districting{
+private:
+    vector<District> district_vec;
+public:
+    int size(){
+        return int(district_vec.size());
+    };
+    void extend_with_new_distric(Voter input_voter){
+        District new_district(input_voter);
+        district_vec.push_back(new_district);
+    };
+    void extend_last_district(Voter input_voter){
+        district_vec.back().insert_voter(input_voter);
     };
 };
 
