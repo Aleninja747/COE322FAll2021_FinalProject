@@ -89,7 +89,7 @@ public:
         this->address_vec = input_address_list.get_address_vec();
         depot=address_vec.at(0);
     };
-    void greedy_route(){
+    void greedy_route(bool manhattan_dist=false){
         vector<Address> remaining_address = this->address_vec;
         vector<Address> route_vec;
         route_vec.push_back(depot);
@@ -99,23 +99,35 @@ public:
             double min_distance = std::numeric_limits<int>::max();
             int closest_index=0;
             for (int i=0; i<remaining_address.size(); i++) {
-                if (remaining_address.at(i).distance(current_address)<min_distance) {
-                    min_distance =remaining_address.at(i).distance(current_address);
+                if (remaining_address.at(i).distance(current_address,manhattan_dist)<min_distance) {
+                    min_distance =remaining_address.at(i).distance(current_address,manhattan_dist);
                     closest_index=i;
                 }
             }
             route_vec.push_back(remaining_address.at(closest_index));
-            remaining_address.erase(remaining_address.begin()+(closest_index-1));
+            remaining_address.erase(remaining_address.begin()+closest_index);
         }
         this->address_vec = route_vec;
+    }
+    double length(bool manhattan_dist=false){
+        double temp_length=0;
+        for (int i=1; i<address_vec.size(); i++) {
+            temp_length+=address_vec.at(i-1).distance(address_vec.at(i),manhattan_dist);
+        }
+        temp_length+=address_vec.back().distance(depot);
+        return temp_length;
     }
 };
 
 int main() {
-    Address address_1(1,1), address_2(2,2), address_3(3,3);
+    Address address_1(0,0), address_2(5,5), address_3(5,0), address_4(0,5);
     Address_list list;
     list.add_address(address_1);
     list.add_address(address_2);
     list.add_address(address_3);
-    cout<< list.length();
+    list.add_address(address_4);
+    Route test(list);
+    cout<< list.length()<<std::endl;
+    test.greedy_route();
+    cout<< test.length()<<std::endl;
 }
