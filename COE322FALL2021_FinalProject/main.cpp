@@ -78,6 +78,19 @@ public:
     }
     vector<Address> get_address_vec(){
         return address_vec;
+    };
+    void reverse(int m, int n){
+        vector<Address> temp_address_vec;
+        for (int i=0; i<m; i++) {
+            temp_address_vec.push_back(address_vec.at(i));
+        }
+        for (int i=n; i>=m; i--) {
+            temp_address_vec.push_back(address_vec.at(i));
+        }
+        for (int i=n+1; i<address_vec.size(); i++) {
+            temp_address_vec.push_back(address_vec.at(i));
+        }
+        address_vec=temp_address_vec;
     }
 };
 
@@ -88,6 +101,12 @@ public:
     Route(Address_list input_address_list){
         this->address_vec = input_address_list.get_address_vec();
         depot=address_vec.at(0);
+    };
+    void print(){
+        for (int i=0; i<address_vec.size(); i++) {
+            cout<<"("<<address_vec.at(i).get_i_position()<<","<<address_vec.at(i).get_j_position()<<") ";
+        }
+        cout<<"("<<depot.get_i_position()<<","<<depot.get_j_position()<<")\n";
     };
     void greedy_route(bool manhattan_dist=false){
         vector<Address> remaining_address = this->address_vec;
@@ -108,7 +127,23 @@ public:
             remaining_address.erase(remaining_address.begin()+closest_index);
         }
         this->address_vec = route_vec;
-    }
+    };
+    
+    void opt2_route(){
+        double temp_length = this->length();
+        for (int n=1; n<address_vec.size(); n++) {
+            for (int m=1; m<n; m++) {
+                this->reverse(m, n);
+                if (this->length()<temp_length) {
+                    temp_length = this->length();
+                }
+                else{
+                    this->reverse(m, n);
+                }
+            }
+        }
+    };
+    
     double length(bool manhattan_dist=false){
         double temp_length=0;
         for (int i=1; i<address_vec.size(); i++) {
@@ -120,14 +155,22 @@ public:
 };
 
 int main() {
-    Address address_1(0,0), address_2(5,5), address_3(5,0), address_4(0,5);
+    Address address_1(0,0), address_2(5,5), address_3(5,0), address_4(0,5), address_5(1,7),address_6(2,7);
     Address_list list;
     list.add_address(address_1);
     list.add_address(address_2);
     list.add_address(address_3);
     list.add_address(address_4);
+    list.add_address(address_5);
+    list.add_address(address_6);
     Route test(list);
+    test.print();
     cout<< list.length()<<std::endl;
+    test.opt2_route();
+    cout<< test.length()<<std::endl;
+    test.print();
     test.greedy_route();
     cout<< test.length()<<std::endl;
+    test.print();
+    
 }
