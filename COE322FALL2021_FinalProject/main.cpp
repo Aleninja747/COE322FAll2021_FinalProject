@@ -19,15 +19,19 @@ using std::cout;
 class Address{
 private:
     double i_position,j_position;
+    bool prime=false;
 public:
     Address():i_position(0), j_position(0){};
-    Address(double i, double j): i_position(i), j_position(j){};
+    Address(double i, double j, bool is_prime=false): i_position(i), j_position(j), prime(is_prime){};
     double get_i_position(){
         return i_position;
     };
     double get_j_position(){
         return j_position;
     };
+    bool is_prime(){
+        return prime;
+    }
     double distance(Address other_address, bool manhattan_dist=false){
         if (manhattan_dist) {
             return abs(other_address.get_i_position()-i_position)+abs(other_address.get_j_position()-j_position);
@@ -151,6 +155,56 @@ public:
         }
         temp_length+=address_vec.back().distance(depot);
         return temp_length;
+    };
+    
+    Address get_address_at(int n){
+        return address_vec.at(n);
+    }
+    
+    void set_address_at(int n, Address input_address){
+        address_vec.at(n)=input_address;
+    }
+};
+
+class MultiRoute{
+private:
+    Route route_1, route_2;
+    int size=0;
+public:
+    MultiRoute(Route input_route_1, Route input_route_2): route_1(input_route_1), route_2(input_route_2){
+        size = int(input_route_1.get_address_vec().size());
+    };
+    void opt2_multi(){
+        this->opt2_individual();
+        double temp_length = this->length();
+        for (int n=1; n<size; n++) {
+            MultiRoute temp_multiRoute(this->route_1,this->route_2);
+            temp_multiRoute.swap_nodes(n);
+            temp_multiRoute.opt2_individual();
+            if (temp_multiRoute.length()<temp_length) {
+                route_1=temp_multiRoute.get_route_1();
+                route_2=temp_multiRoute.get_route_2();
+                temp_length=this->length();
+            }
+        }
+    }
+    void opt2_individual(){
+        route_1.opt2_route();
+        route_2.opt2_route();
+    }
+    Route get_route_1(){
+        return route_1;
+    }
+    Route get_route_2(){
+        return route_2;
+    }
+    void swap_nodes(int n){
+        Address temp_address=route_1.get_address_at(n);
+        route_1.set_address_at(n, route_2.get_address_at(n));
+        route_2.set_address_at(n, temp_address);
+    };
+    double length(){
+        return route_1.length()+route_2.length();
     }
 };
 
