@@ -264,6 +264,7 @@ public:
         }
         
     };
+//    Switches node from one list to another.
     void switch_nodes(int n){
         if (route_1.size()>route_2.size()) {
             if (!route_1.get_address_at(n).is_prime()) {
@@ -292,15 +293,15 @@ public:
     }
 };
 
-Address_list randomize_address_list(int n){
+Address_list randomize_address_list(int n, int ratio=5){
     Address_list return_address_list;
     
     double temp_i,temp_j;
     bool temp_prime;
     for (int i=0; i<n; i++) {
-        temp_i=(rand() % 1000 + 1)/10;
-        temp_j=(rand() % 1000 + 1)/10;
-        if ((rand()%10+1)<=5) {
+        temp_i=rand() % 100+1;
+        temp_j=rand() % 100+1;
+        if ((rand()%10+1)<=ratio) {
             temp_prime=true;
         }
         else{
