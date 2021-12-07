@@ -10,11 +10,17 @@
 #include <string>
 #include <math.h>
 #include <limits>
+#include <stdlib.h>     /* srand, rand */
+#include <time.h>
+#include <stdio.h>
+#include <fstream>
 
 
 using std::vector;
 using std::string;
 using std::cout;
+using std::ofstream;
+
 
 class Address{
 private:
@@ -68,6 +74,9 @@ public:
             temp_length+=address_vec.at(i-1).distance(address_vec.at(i),manhattan_dist);
         }
         return temp_length;
+    }
+    int size(){
+        return int(address_vec.size());
     }
     Address index_closest_to(Address input_address){
         double min_distance = std::numeric_limits<int>::max();
@@ -220,19 +229,47 @@ public:
     }
 };
 
+Address_list randomize_address_list(int n){
+    Address_list return_address_list;
+    
+    double temp_i,temp_j;
+    bool temp_prime;
+    for (int i=0; i<n; i++) {
+        temp_i=(rand() % 1000 + 1)/10;
+        temp_j=(rand() % 1000 + 1)/10;
+        if ((rand()%10+1)<=5) {
+            temp_prime=true;
+        }
+        else{
+            temp_prime=false;
+        }
+        Address temp_address(temp_i,temp_j,temp_prime);
+        return_address_list.add_address(temp_address);
+    }
+    return return_address_list;
+}
+
+void write_address_list(Address_list input_address_list, string filename){
+    ofstream output_file;
+    output_file.open(filename);
+    for (int i=0; i<input_address_list.size(); i++) {
+        output_file<<input_address_list.get_address_vec().at(i).get_i_position()<<","<<input_address_list.get_address_vec().at(i).get_j_position()<<","<<input_address_list.get_address_vec().at(i).is_prime()<<"\n";
+    }
+    output_file.close();
+}
+
 int main() {
-    Address address_1(0,1), address_2(1,0), address_3(2,0), address_4(3,1,true), address_5(3,0),address_6(2,1), address_7(1,1),address_8(0,0,true);
+    srand (int(time(NULL)));
     Address_list list_1,list_2;
-    list_1.add_address(address_1);
-    list_1.add_address(address_2);
-    list_1.add_address(address_3);
-    list_1.add_address(address_4);
-    list_2.add_address(address_5);
-    list_2.add_address(address_6);
-    list_2.add_address(address_7);
-    list_2.add_address(address_8);
-    Route test_1(list_1),test_2(list_2);
-    MultiRoute test(test_1,test_2);
+    list_1 = randomize_address_list(100);
+    write_address_list(list_1, "/Users/jorgericaurte/Documents/University/Fall 2021/COE 322/Final Project/COE322FALL2021_FinalProject/COE322FALL2021_FinalProject/list_1.csv");
+    list_2 = randomize_address_list(100);
+    write_address_list(list_2, "/Users/jorgericaurte/Documents/University/Fall 2021/COE 322/Final Project/COE322FALL2021_FinalProject/COE322FALL2021_FinalProject/list_2.csv");
+    Route route_1(list_1),route_2(list_2);
+    MultiRoute test(route_1,route_2);
+    cout<<"Original length: "<<list_1.length()+list_2.length()<<"\n\n";
     test.opt2_multi();
     test.print();
+    write_address_list(test.get_route_1(), "/Users/jorgericaurte/Documents/University/Fall 2021/COE 322/Final Project/COE322FALL2021_FinalProject/COE322FALL2021_FinalProject/list_3.csv");
+    write_address_list(test.get_route_2(), "/Users/jorgericaurte/Documents/University/Fall 2021/COE 322/Final Project/COE322FALL2021_FinalProject/COE322FALL2021_FinalProject/list_4.csv");
 }
