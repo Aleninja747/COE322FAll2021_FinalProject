@@ -174,6 +174,9 @@ public:
     void set_address_at(int n, Address input_address){
         address_vec.at(n)=input_address;
     }
+    void remove_address_at(int n){
+        address_vec.erase(address_vec.begin()+n);
+    }
 };
 
 class MultiRoute{
@@ -188,11 +191,23 @@ public:
         if (greedy) {
             this->greedy_individual();
         }
-        
+        bool equal_size=true;
+        int small_size=0;
         this->opt2_individual();
-        
+        if (route_1.size()!=route_2.size()) {
+            equal_size=false;
+            if (route_1.size()>route_2.size()) {
+                small_size = route_2.size();
+            }
+            else{
+                small_size = route_1.size();
+            }
+        }
+        else{
+            small_size = size;
+        }
         double temp_length = this->length();
-        for (int n=1; n<size; n++) {
+        for (int n=1; n<small_size; n++) {
             MultiRoute temp_multiRoute(this->route_1,this->route_2);
             temp_multiRoute.swap_nodes(n);
             if (greedy) {
@@ -205,6 +220,25 @@ public:
                 route_1=temp_multiRoute.get_route_1();
                 route_2=temp_multiRoute.get_route_2();
                 temp_length=this->length();
+            }
+        }
+        if (!equal_size){
+            temp_length=this->length();
+            for (int n=small_size; n<size; n++) {
+                MultiRoute temp_multiRoute(this->route_1,this->route_2);
+                temp_multiRoute.switch_nodes(n);
+                temp_multiRoute.opt2_individual();
+                if (temp_multiRoute.length()<temp_length) {
+                    route_1=temp_multiRoute.get_route_1();
+                    route_2=temp_multiRoute.get_route_2();
+                    temp_length=this->length();
+                    if (route_1.size()>route_2.size()) {
+                        size = route_1.size();
+                    }
+                    else{
+                        size = route_2.size();
+                    }
+                }
             }
         }
     }
@@ -229,6 +263,20 @@ public:
             route_2.set_address_at(n, temp_address);
         }
         
+    };
+    void switch_nodes(int n){
+        if (route_1.size()>route_2.size()) {
+            if (!route_1.get_address_at(n).is_prime()) {
+                route_2.add_address(route_1.get_address_at(n));
+                route_1.remove_address_at(n);
+            }
+        }
+        else if (route_2.size()>route_1.size()){
+            if (!route_2.get_address_at(n).is_prime()) {
+                route_1.add_address(route_2.get_address_at(n));
+                route_2.remove_address_at(n);
+            }
+        }
     };
     double length(){
         return route_1.length()+route_2.length();
@@ -332,4 +380,5 @@ int main() {
     write_address_list(test_2.get_route_2(), "/Users/jorgericaurte/Documents/University/Fall 2021/COE 322/Final Project/COE322FALL2021_FinalProject/COE322FALL2021_FinalProject/OPT2_multi_route_2.csv");
     
     write_lengths(name_vec, value_vec, "/Users/jorgericaurte/Documents/University/Fall 2021/COE 322/Final Project/COE322FALL2021_FinalProject/COE322FALL2021_FinalProject/Lengths.csv");
+    cout<<"size 1: "<<test_2.get_route_1().size()<<", size 2:"<<test_2.get_route_2().size()<<"\n";
 }
