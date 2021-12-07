@@ -199,9 +199,12 @@ public:
         return route_2;
     }
     void swap_nodes(int n){
-        Address temp_address=route_1.get_address_at(n);
-        route_1.set_address_at(n, route_2.get_address_at(n));
-        route_2.set_address_at(n, temp_address);
+        if (!route_1.get_address_at(n).is_prime() && !route_2.get_address_at(n).is_prime()) {
+            Address temp_address=route_1.get_address_at(n);
+            route_1.set_address_at(n, route_2.get_address_at(n));
+            route_2.set_address_at(n, temp_address);
+        }
+        
     };
     double length(){
         return route_1.length()+route_2.length();
@@ -218,7 +221,7 @@ public:
 };
 
 int main() {
-    Address address_1(0,1), address_2(1,0), address_3(2,0), address_4(3,1), address_5(3,0),address_6(2,1), address_7(1,1),address_8(0,0);
+    Address address_1(0,1), address_2(1,0), address_3(2,0), address_4(3,1,true), address_5(3,0),address_6(2,1), address_7(1,1),address_8(0,0,true);
     Address_list list_1,list_2;
     list_1.add_address(address_1);
     list_1.add_address(address_2);
