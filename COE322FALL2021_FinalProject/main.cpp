@@ -206,25 +206,30 @@ public:
     double length(){
         return route_1.length()+route_2.length();
     }
+    void print(){
+        cout<<"Route 1:\n";
+        route_1.print();
+        cout<<"Length of Route 1: "<<route_1.length()<<"\n\n";
+        cout<<"Route 2:\n";
+        route_2.print();
+        cout<<"Length of Route 2: "<<route_2.length()<<"\n\n";
+        cout<<"Total Length: "<<this->length()<<std::endl;
+    }
 };
 
 int main() {
-    Address address_1(0,0), address_2(5,5), address_3(5,0), address_4(0,5), address_5(1,7),address_6(2,7);
-    Address_list list;
-    list.add_address(address_1);
-    list.add_address(address_2);
-    list.add_address(address_3);
-    list.add_address(address_4);
-    list.add_address(address_5);
-    list.add_address(address_6);
-    Route test(list);
+    Address address_1(0,1), address_2(1,0), address_3(2,0), address_4(3,1), address_5(3,0),address_6(2,1), address_7(1,1),address_8(0,0);
+    Address_list list_1,list_2;
+    list_1.add_address(address_1);
+    list_1.add_address(address_2);
+    list_1.add_address(address_3);
+    list_1.add_address(address_4);
+    list_2.add_address(address_5);
+    list_2.add_address(address_6);
+    list_2.add_address(address_7);
+    list_2.add_address(address_8);
+    Route test_1(list_1),test_2(list_2);
+    MultiRoute test(test_1,test_2);
+    test.opt2_multi();
     test.print();
-    cout<< list.length()<<std::endl;
-    test.opt2_route();
-    cout<< test.length()<<std::endl;
-    test.print();
-    test.greedy_route();
-    cout<< test.length()<<std::endl;
-    test.print();
-    
 }
