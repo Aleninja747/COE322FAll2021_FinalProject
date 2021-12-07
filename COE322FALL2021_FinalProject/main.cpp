@@ -73,6 +73,7 @@ public:
         for (int i=1; i<address_vec.size(); i++) {
             temp_length+=address_vec.at(i-1).distance(address_vec.at(i),manhattan_dist);
         }
+        temp_length+=address_vec.back().distance(address_vec.at(0),manhattan_dist);
         return temp_length;
     }
     int size(){
@@ -183,13 +184,23 @@ public:
     MultiRoute(Route input_route_1, Route input_route_2): route_1(input_route_1), route_2(input_route_2){
         size = int(input_route_1.get_address_vec().size());
     };
-    void opt2_multi(){
+    void opt2_multi(bool greedy=false){
+        if (greedy) {
+            this->greedy_individual();
+        }
+        
         this->opt2_individual();
+        
         double temp_length = this->length();
         for (int n=1; n<size; n++) {
             MultiRoute temp_multiRoute(this->route_1,this->route_2);
             temp_multiRoute.swap_nodes(n);
+            if (greedy) {
+                temp_multiRoute.greedy_individual();
+            }
+            
             temp_multiRoute.opt2_individual();
+            
             if (temp_multiRoute.length()<temp_length) {
                 route_1=temp_multiRoute.get_route_1();
                 route_2=temp_multiRoute.get_route_2();
@@ -200,6 +211,10 @@ public:
     void opt2_individual(){
         route_1.opt2_route();
         route_2.opt2_route();
+    }
+    void greedy_individual(){
+        route_1.greedy_route();
+        route_2.greedy_route();
     }
     Route get_route_1(){
         return route_1;
@@ -257,19 +272,64 @@ void write_address_list(Address_list input_address_list, string filename){
     }
     output_file.close();
 }
+void write_lengths(vector<string> name_vec, vector<double> value_vec, string filename){
+    ofstream output_file;
+    output_file.open(filename);
+    for (int i=0; i<name_vec.size(); i++) {
+        output_file<<name_vec.at(i)<<","<<value_vec.at(i)<<"\n";
+    }
+    output_file.close();
+}
 
 int main() {
     srand (int(time(NULL)));
+    vector<string> name_vec, type_vec;
+    vector<double> value_vec;
     Address_list list_1,list_2;
     list_1 = randomize_address_list(100);
-    write_address_list(list_1, "/Users/jorgericaurte/Documents/University/Fall 2021/COE 322/Final Project/COE322FALL2021_FinalProject/COE322FALL2021_FinalProject/list_1.csv");
+    write_address_list(list_1, "/Users/jorgericaurte/Documents/University/Fall 2021/COE 322/Final Project/COE322FALL2021_FinalProject/COE322FALL2021_FinalProject/Unsorted_route_1.csv");
     list_2 = randomize_address_list(100);
-    write_address_list(list_2, "/Users/jorgericaurte/Documents/University/Fall 2021/COE 322/Final Project/COE322FALL2021_FinalProject/COE322FALL2021_FinalProject/list_2.csv");
+    write_address_list(list_2, "/Users/jorgericaurte/Documents/University/Fall 2021/COE 322/Final Project/COE322FALL2021_FinalProject/COE322FALL2021_FinalProject/Unsorted_route_2.csv");
+    value_vec.push_back(list_1.length());
+    value_vec.push_back(list_2.length());
+    name_vec.push_back("Unsorted initial route 1");
+    name_vec.push_back("Unsorted initial route 2");
     Route route_1(list_1),route_2(list_2);
     MultiRoute test(route_1,route_2);
-    cout<<"Original length: "<<list_1.length()+list_2.length()<<"\n\n";
-    test.opt2_multi();
+    route_1.greedy_route();
+    route_2.greedy_route();
+    write_address_list(route_1, "/Users/jorgericaurte/Documents/University/Fall 2021/COE 322/Final Project/COE322FALL2021_FinalProject/COE322FALL2021_FinalProject/Greedy_route_1.csv");
+    write_address_list(route_2, "/Users/jorgericaurte/Documents/University/Fall 2021/COE 322/Final Project/COE322FALL2021_FinalProject/COE322FALL2021_FinalProject/Greedy_route_2.csv");
+    value_vec.push_back(route_1.length());
+    value_vec.push_back(route_2.length());
+    name_vec.push_back("Greedy sorted route 1");
+    name_vec.push_back("Greedy sorted route 2");
+    test.opt2_individual();
+    write_address_list(test.get_route_1(), "/Users/jorgericaurte/Documents/University/Fall 2021/COE 322/Final Project/COE322FALL2021_FinalProject/COE322FALL2021_FinalProject/OPT2_individual_route_1.csv");
+    write_address_list(test.get_route_2(), "/Users/jorgericaurte/Documents/University/Fall 2021/COE 322/Final Project/COE322FALL2021_FinalProject/COE322FALL2021_FinalProject/OPT2_individual_route_2.csv");
+    value_vec.push_back(test.get_route_1().length());
+    value_vec.push_back(test.get_route_2().length());
+    name_vec.push_back("OPT2 individually sorted route 1");
+    name_vec.push_back("OPT2 individually sorted route 2");
+    
+    MultiRoute test_2 = test;
+    test.opt2_multi(true);
     test.print();
-    write_address_list(test.get_route_1(), "/Users/jorgericaurte/Documents/University/Fall 2021/COE 322/Final Project/COE322FALL2021_FinalProject/COE322FALL2021_FinalProject/list_3.csv");
-    write_address_list(test.get_route_2(), "/Users/jorgericaurte/Documents/University/Fall 2021/COE 322/Final Project/COE322FALL2021_FinalProject/COE322FALL2021_FinalProject/list_4.csv");
+    value_vec.push_back(test.get_route_1().length());
+    value_vec.push_back(test.get_route_2().length());
+    name_vec.push_back("Greedy multi sorted route 1");
+    name_vec.push_back("Greedy multi sorted route 2");
+    write_address_list(test.get_route_1(), "/Users/jorgericaurte/Documents/University/Fall 2021/COE 322/Final Project/COE322FALL2021_FinalProject/COE322FALL2021_FinalProject/Greedy_multi_route_1.csv");
+    write_address_list(test.get_route_2(), "/Users/jorgericaurte/Documents/University/Fall 2021/COE 322/Final Project/COE322FALL2021_FinalProject/COE322FALL2021_FinalProject/Greedy_multi_route_2.csv");
+    
+    test_2.opt2_multi();
+    test_2.print();
+    value_vec.push_back(test_2.get_route_1().length());
+    value_vec.push_back(test_2.get_route_2().length());
+    name_vec.push_back("OPT2 multi sorted route 1");
+    name_vec.push_back("OPT2 multi sorted route 2");
+    write_address_list(test_2.get_route_1(), "/Users/jorgericaurte/Documents/University/Fall 2021/COE 322/Final Project/COE322FALL2021_FinalProject/COE322FALL2021_FinalProject/OPT2_multi_route_1.csv");
+    write_address_list(test_2.get_route_2(), "/Users/jorgericaurte/Documents/University/Fall 2021/COE 322/Final Project/COE322FALL2021_FinalProject/COE322FALL2021_FinalProject/OPT2_multi_route_2.csv");
+    
+    write_lengths(name_vec, value_vec, "/Users/jorgericaurte/Documents/University/Fall 2021/COE 322/Final Project/COE322FALL2021_FinalProject/COE322FALL2021_FinalProject/Lengths.csv");
 }
