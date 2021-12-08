@@ -2,7 +2,7 @@
 //  main.cpp
 //  COE322FALL2021_FinalProject
 //
-//  Created by Jorge Alejandro Ricaurte on 11/22/21.
+//  Created by Jorge Alejandro Ricaurte(jar9867), Antonio Gil(ag73867), Nikhil Sharma(ns34253)
 //
 
 #include <iostream>
@@ -363,7 +363,6 @@ int main() {
     
     MultiRoute test_2 = test;
     test.opt2_multi(true);
-    test.print();
     value_vec.push_back(test.get_route_1().length());
     value_vec.push_back(test.get_route_2().length());
     name_vec.push_back("Greedy multi sorted route 1");
@@ -372,7 +371,6 @@ int main() {
     write_address_list(test.get_route_2(), "/Users/jorgericaurte/Documents/University/Fall 2021/COE 322/Final Project/COE322FALL2021_FinalProject/COE322FALL2021_FinalProject/Greedy_multi_route_2.csv");
     
     test_2.opt2_multi();
-    test_2.print();
     value_vec.push_back(test_2.get_route_1().length());
     value_vec.push_back(test_2.get_route_2().length());
     name_vec.push_back("OPT2 multi sorted route 1");
@@ -381,5 +379,4 @@ int main() {
     write_address_list(test_2.get_route_2(), "/Users/jorgericaurte/Documents/University/Fall 2021/COE 322/Final Project/COE322FALL2021_FinalProject/COE322FALL2021_FinalProject/OPT2_multi_route_2.csv");
     
     write_lengths(name_vec, value_vec, "/Users/jorgericaurte/Documents/University/Fall 2021/COE 322/Final Project/COE322FALL2021_FinalProject/COE322FALL2021_FinalProject/Lengths.csv");
-    cout<<"size 1: "<<test_2.get_route_1().size()<<", size 2:"<<test_2.get_route_2().size()<<"\n";
 }
