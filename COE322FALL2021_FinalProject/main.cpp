@@ -10,7 +10,7 @@
 #include <string>
 #include <math.h>
 #include <limits>
-#include <stdlib.h>     /* srand, rand */
+#include <stdlib.h>
 #include <time.h>
 #include <stdio.h>
 #include <fstream>
@@ -336,9 +336,9 @@ int main() {
     vector<double> value_vec;
     Address_list list_1,list_2;
     list_1 = randomize_address_list(100);
-    write_address_list(list_1, "/Users/jorgericaurte/Documents/University/Fall 2021/COE 322/Final Project/COE322FALL2021_FinalProject/COE322FALL2021_FinalProject/Unsorted_route_1.csv");
+    write_address_list(list_1, "Unsorted_route_1.csv");
     list_2 = randomize_address_list(100);
-    write_address_list(list_2, "/Users/jorgericaurte/Documents/University/Fall 2021/COE 322/Final Project/COE322FALL2021_FinalProject/COE322FALL2021_FinalProject/Unsorted_route_2.csv");
+    write_address_list(list_2, "Unsorted_route_2.csv");
     value_vec.push_back(list_1.length());
     value_vec.push_back(list_2.length());
     name_vec.push_back("Unsorted initial route 1");
@@ -347,15 +347,15 @@ int main() {
     MultiRoute test(route_1,route_2);
     route_1.greedy_route();
     route_2.greedy_route();
-    write_address_list(route_1, "/Users/jorgericaurte/Documents/University/Fall 2021/COE 322/Final Project/COE322FALL2021_FinalProject/COE322FALL2021_FinalProject/Greedy_route_1.csv");
-    write_address_list(route_2, "/Users/jorgericaurte/Documents/University/Fall 2021/COE 322/Final Project/COE322FALL2021_FinalProject/COE322FALL2021_FinalProject/Greedy_route_2.csv");
+    write_address_list(route_1, "Greedy_route_1.csv");
+    write_address_list(route_2, "Greedy_route_2.csv");
     value_vec.push_back(route_1.length());
     value_vec.push_back(route_2.length());
     name_vec.push_back("Greedy sorted route 1");
     name_vec.push_back("Greedy sorted route 2");
     test.opt2_individual();
-    write_address_list(test.get_route_1(), "/Users/jorgericaurte/Documents/University/Fall 2021/COE 322/Final Project/COE322FALL2021_FinalProject/COE322FALL2021_FinalProject/OPT2_individual_route_1.csv");
-    write_address_list(test.get_route_2(), "/Users/jorgericaurte/Documents/University/Fall 2021/COE 322/Final Project/COE322FALL2021_FinalProject/COE322FALL2021_FinalProject/OPT2_individual_route_2.csv");
+    write_address_list(test.get_route_1(), "OPT2_individual_route_1.csv");
+    write_address_list(test.get_route_2(), "OPT2_individual_route_2.csv");
     value_vec.push_back(test.get_route_1().length());
     value_vec.push_back(test.get_route_2().length());
     name_vec.push_back("OPT2 individually sorted route 1");
@@ -367,16 +367,18 @@ int main() {
     value_vec.push_back(test.get_route_2().length());
     name_vec.push_back("Greedy multi sorted route 1");
     name_vec.push_back("Greedy multi sorted route 2");
-    write_address_list(test.get_route_1(), "/Users/jorgericaurte/Documents/University/Fall 2021/COE 322/Final Project/COE322FALL2021_FinalProject/COE322FALL2021_FinalProject/Greedy_multi_route_1.csv");
-    write_address_list(test.get_route_2(), "/Users/jorgericaurte/Documents/University/Fall 2021/COE 322/Final Project/COE322FALL2021_FinalProject/COE322FALL2021_FinalProject/Greedy_multi_route_2.csv");
+    write_address_list(test.get_route_1(), "Greedy_multi_route_1.csv");
+    write_address_list(test.get_route_2(), "Greedy_multi_route_2.csv");
+    test.print();
     
     test_2.opt2_multi();
     value_vec.push_back(test_2.get_route_1().length());
     value_vec.push_back(test_2.get_route_2().length());
     name_vec.push_back("OPT2 multi sorted route 1");
     name_vec.push_back("OPT2 multi sorted route 2");
-    write_address_list(test_2.get_route_1(), "/Users/jorgericaurte/Documents/University/Fall 2021/COE 322/Final Project/COE322FALL2021_FinalProject/COE322FALL2021_FinalProject/OPT2_multi_route_1.csv");
-    write_address_list(test_2.get_route_2(), "/Users/jorgericaurte/Documents/University/Fall 2021/COE 322/Final Project/COE322FALL2021_FinalProject/COE322FALL2021_FinalProject/OPT2_multi_route_2.csv");
+    write_address_list(test_2.get_route_1(), "OPT2_multi_route_1.csv");
+    write_address_list(test_2.get_route_2(), "OPT2_multi_route_2.csv");
+    test_2.print();
     
-    write_lengths(name_vec, value_vec, "/Users/jorgericaurte/Documents/University/Fall 2021/COE 322/Final Project/COE322FALL2021_FinalProject/COE322FALL2021_FinalProject/Lengths.csv");
+    write_lengths(name_vec, value_vec, "Lengths.csv");
 }
